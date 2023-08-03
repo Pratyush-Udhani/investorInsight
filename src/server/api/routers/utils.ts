@@ -4,8 +4,7 @@ import { env } from "~/env.mjs";
 
 const sheets = google.sheets({ version: 'v4', auth: env.API_KEY });
 
-export async function fetchDataFromSheet(categoryId: number) {
-    const categoryName = ""
+export async function fetchDataFromSheet(categoryName: string) {
     const spreadsheetId = '13pqsh7-u-Ur7CnTIXwh5lwpkCYXFdanX3c5Tq-hiwVc';
     const range = 'Sheet1!A1:M';
 
