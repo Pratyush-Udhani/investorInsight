@@ -2,39 +2,40 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model App {
-    id Int @id @default(autoincrement())
-    name String
-    rating Int
-    reviews_number Int
-    size String
-    installs String
-    price Int
-    content_rating String
-    version String
-    last_updating String 
-    genre Genre @relation(fields: [genreId], references: [id])
-    genreId Int
+  id             Int    @id @default(autoincrement())
+  name           String
+  rating         Int
+  reviews_number Int
+  size           String
+  installs       String
+  price          String
+  content_rating String
+  version        String
+  last_updated   String
+  android_ver    String
+  genreId        Int
+  Genre          Genre  @relation(fields: [genreId], references: [id])
 }
 
 model Genre {
-    id Int @id @default(autoincrement())
-    name String
-    apps App[]
-    category Category @relation(fields: [categoryId], references: [id])
-    categoryId Int 
+  id         Int      @id @default(autoincrement())
+  name       String
+  apps       App[]
+  categoryId Int
+  Category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Category {
-    id Int @id @default(autoincrement())
-    name String 
-    genres Genre[]
+  id     Int     @id @default(autoincrement())
+  name   String
+  genres Genre[]
 }

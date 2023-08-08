@@ -12,11 +12,7 @@ export const router = createTRPCRouter({
         if (data && data.length > 0) {
             await populateDataToPrisma(data);
         }
-        const apps = await prisma.category.findUnique({
-            where: { id: input}, 
-            include: { genres: { include: { apps: true } } }
-        })
-        return apps
+        return ""
     }), 
     routerTest: publicProcedure
     .input(z.string())

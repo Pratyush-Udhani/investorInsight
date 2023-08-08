@@ -18,28 +18,14 @@ export async function fetchDataFromSheet(categoryName: string) {
             spreadsheetId: env.SHEET_ID, 
             range: range, 
         }); 
-        console.log("data in utils: ", JSON.stringify(response, null, 2));
 
         const data = response.data.values; 
         if (!data || data.length === 0) {
             console.log("no data found in range");
             return null; 
         }
-
-        const headers = data.shift();
-        const filteredData = data.filter(row => row[0] === categoryName);
-        const formattedData = filteredData.map(row => {
-            row.reduce((acc, value, index) => {
-                if (headers) {
-                    acc[headers[index]] = value
-                    return acc; 
-                } else {
-                    return null;
-                }
-            }, {})
-        }); 
-
-        return formattedData; 
+        const headers = data.shift()
+        return(data)
     } catch (error) {
         console.log("erroi")
         return null;
@@ -47,17 +33,18 @@ export async function fetchDataFromSheet(categoryName: string) {
 }
 export async function populateDataToPrisma(data: any[]) {
     for (const row of data) {
-        const categoryName: string  = row['Category']
-        const genreName: string = row['Genres']
-        const appName: string = row['name']
-        const rating: number = row['']
-        const reviews_number: number = row['']
-        const size: string = row['']
-        const installs: string = row['']
-        const price: number = row['']
-        const content_rating: string = row['']
-        const version: string = row['']
-        const last_updated: string = row['']
+        const categoryName: string  = row[1]
+        const genreName: string = row[9]
+        const appName: string = row[0]
+        const rating: number = row[2]
+        const reviews_number: number = row[3]
+        const size: string = row[4]
+        const installs: string = row[5]
+        const price: string = row[7]
+        const content_rating: string = row[8]
+        const version: string = row[11]
+        const last_updated: string = row[10]
+        const android_ver: string = row[12]
 
         const existingCategory = await prisma.category.findFirst({
             where: { name: categoryName }
@@ -73,76 +60,98 @@ export async function populateDataToPrisma(data: any[]) {
         let app; 
 
         if (existingCategory) {
-            category = await prisma.category.update({
-                where: { id: existingCategory.id}, 
-                data: { name: categoryName }
-            });
             if (!existingGenre) {
-                genre = await prisma.genre.create({
-                    data: { name: genreName, categoryId: category.id }
-                });
-
-                app = await prisma.app.create({
-                    data: {
-                        name: appName, 
-                        rating: rating,
-                        reviews_number: reviews_number,
-                        size: size,
-                        installs: installs,
-                        price: price, 
-                        content_rating: content_rating,
-                        version: version, 
-                        last_updating: last_updated,
-                        genreId: genre.id
-                    }
-                })
-            } else {
-
-                genre = await prisma.genre.update({
-                    where: { id:existingGenre.id}, 
-                    data: { name: genreName}
-                });
-
-                if (!existingApp) {
-                    app = await prisma.app.create({
-                        data: {
-                            name: appName, 
-                            rating: rating,
-                            reviews_number: reviews_number,
-                            size: size,
-                            installs: installs,
-                            price: price, 
-                            content_rating: content_rating,
-                            version: version, 
-                            last_updating: last_updated,
-                            genreId: genre.id
+                category = await prisma.category.update({
+                    where: { id: existingCategory.id}, 
+                    data: { name: categoryName, 
+                        genres: {
+                            create: [
+                                {
+                                    name: genreName, 
+                                    apps: {
+                                        create: [
+                                            {
+                                                name: appName, 
+                                                rating: +rating,
+                                                reviews_number: +reviews_number,
+                                                size: size,
+                                                installs: installs,
+                                                price: price,
+                                                content_rating: content_rating,
+                                                version: version, 
+                                                last_updated: last_updated,
+                                                android_ver: android_ver,
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
                         }
-                    })
-                }
+                    }
+                });
+            } else {
+                category = await prisma.category.update({
+                    where: { id: existingCategory.id },
+                    data: {
+                        name: categoryName,
+                        genres: {
+                            update: [
+                                {
+                                    where: { id: existingGenre.id },
+                                    data: {
+                                        name: genreName,
+                                        apps: {
+                                            create: [
+                                                {
+                                                    name: appName,
+                                                    rating: +rating,
+                                                    reviews_number: +reviews_number,
+                                                    size: size,
+                                                    installs: installs,
+                                                    price: price,
+                                                    content_rating: content_rating,
+                                                    version: version,
+                                                    last_updated: last_updated,
+                                                    android_ver: android_ver,
+                                                }
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                });
             }
         } else {
             category = await prisma.category.create({
-                data: { name: categoryName }
-            });
-
-            genre = await prisma.genre.create({
-                data: { name: genreName, categoryId: category.id }
-            });
-
-            app = await prisma.app.create({
                 data: {
-                    name: appName, 
-                    rating: rating,
-                    reviews_number: reviews_number,
-                    size: size,
-                    installs: installs,
-                    price: price, 
-                    content_rating: content_rating,
-                    version: version, 
-                    last_updating: last_updated,
-                    genreId: genre.id
-                }
-            })
+                    name: categoryName,
+                    genres: {
+                        create: [
+                            {
+                                name:genreName,
+                                apps: {
+                                    create: [
+                                        {
+                                            name: appName,
+                                            rating: +rating,
+                                            reviews_number: +reviews_number,
+                                            size: size,
+                                            installs: installs,
+                                            price: price,
+                                            content_rating: content_rating,
+                                            version: version,
+                                            last_updated: last_updated,
+                                            android_ver: android_ver,
+                                        }
+                                    ],
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
         }
     }
 }
