@@ -2,17 +2,23 @@ import { prisma } from "~/server/db";
 import { google } from 'googleapis';
 import { env } from "~/env.mjs";
 
-const sheets = google.sheets({ version: 'v4', auth: env.API_KEY });
-
 export async function fetchDataFromSheet(categoryName: string) {
-    const spreadsheetId = '13pqsh7-u-Ur7CnTIXwh5lwpkCYXFdanX3c5Tq-hiwVc';
-    const range = 'Sheet1!A1:M';
-
+    const target = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
+    const jwt = new google.auth.JWT(
+        env.GOOGLE_SHEETS_CLIENT_EMAIL,
+        undefined,
+        (env.GOOGLE_SHEETS_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+        target
+    );
+    const sheets = google.sheets({ version: 'v4', auth: jwt });
+    const range = 'Sheet1'
     try {
+        console.log("trying")
         const response = await sheets.spreadsheets.values.get({
-            spreadsheetId, 
-            range, 
+            spreadsheetId: env.SHEET_ID, 
+            range: range, 
         }); 
+        console.log("data in utils: ", JSON.stringify(response, null, 2));
 
         const data = response.data.values; 
         if (!data || data.length === 0) {
@@ -35,7 +41,7 @@ export async function fetchDataFromSheet(categoryName: string) {
 
         return formattedData; 
     } catch (error) {
-        console.log("error fetching data from sheets")
+        console.log("erroi")
         return null;
     }
 }

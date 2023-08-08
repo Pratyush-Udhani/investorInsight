@@ -18,4 +18,13 @@ export const router = createTRPCRouter({
         })
         return apps
     }), 
+    routerTest: publicProcedure
+    .input(z.string())
+    .query(async (opts) => {
+        const { input } = opts 
+        const apps = {
+            data: "this is the return data " + input
+        }
+        return apps
+    }), 
 });

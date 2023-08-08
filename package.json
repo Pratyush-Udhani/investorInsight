@@ -12,12 +12,12 @@
   "dependencies": {
     "@prisma/client": "^5.0.0",
     "@t3-oss/env-nextjs": "^0.3.1",
-    "@tanstack/react-query": "^4.29.7",
     "@trpc/client": "^10.26.0",
     "@trpc/next": "^10.26.0",
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.26.0",
     "d3": "^7.8.5",
+    "fs": "^0.0.1-security",
     "googleapis": "^123.0.0",
     "next": "^13.4.2",
     "react": "18.2.0",
@@ -27,6 +27,8 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-query-devtools": "^4.32.6",
     "@types/d3": "^7.4.0",
     "@types/eslint": "^8.37.0",
     "@types/node": "^18.16.0",

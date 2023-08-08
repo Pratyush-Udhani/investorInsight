@@ -9,7 +9,9 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     NODE_ENV: z.enum(["development", "test", "production"]),
-    API_KEY: z.string()
+    SHEET_ID: z.string(), 
+    GOOGLE_SHEETS_PRIVATE_KEY: z.string(),
+    GOOGLE_SHEETS_CLIENT_EMAIL: z.string()
   },
 
   /**
@@ -28,7 +30,9 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    API_KEY: process.env.API_KEY
+    SHEET_ID: process.env.SHEET_ID, 
+    GOOGLE_SHEETS_PRIVATE_KEY: process.env.GOOGLE_SHEETS_PRIVATE_KEY,
+    GOOGLE_SHEETS_CLIENT_EMAIL: process.env.GOOGLE_SHEETS_CLIENT_EMAIL
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
