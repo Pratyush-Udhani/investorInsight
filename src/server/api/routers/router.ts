@@ -8,11 +8,16 @@ export const router = createTRPCRouter({
     getAppsByCategory: publicProcedure
     .input(z.nativeEnum(CategoryEnum))
     .query(async ({ input }) => {
-        const data = await fetchDataFromSheet(CategoryMapping[input]);
-        if (data && data.length > 0) {
-            await populateDataToPrisma(data);
-        }
-        return ""
+        //const data = await fetchDataFromSheet(CategoryMapping[input]);
+        //if (data && data.length > 0) {
+        //    await populateDataToPrisma(data);
+        //}
+        const apps = await prisma.category.findUnique({
+            where: { id: input }, 
+            include: { genres: { include: { apps: true } } }
+        })
+
+        return apps;
     }), 
     routerTest: publicProcedure
     .input(z.string())

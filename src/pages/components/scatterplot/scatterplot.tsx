@@ -17,7 +17,7 @@ type InteractionData = {x: number, y: number, size: number} & {
     yPos: number;
 }
 export const Scatterplot = ({ width, height, data }: ScatterplotProps) => {
-   const [interactionData, setInteractionData] = useState<InteractionData>();
+    const [interactionData, setInteractionData] = useState<InteractionData>();
     const sortedData = data.sort((a, b) => b.size - a.size);
 
  // Scales

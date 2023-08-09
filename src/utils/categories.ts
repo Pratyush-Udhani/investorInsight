@@ -71,7 +71,7 @@ export const CategoryMapping: Record<CategoryEnum, string> = {
 };
 
 export const CategoryIdMapping: Record<string, CategoryEnum> = Object.fromEntries(
-  Object.entries(CategoryMapping).map(([key, value]) => [value, Number(key) as CategoryEnum])
+  Object.entries(CategoryMapping).map(([key, value]) => [value, Number(key) + 1 as CategoryEnum])
 );
 
 export const categories = Object.keys(CategoryEnum).filter((v) => isNaN(Number(v)));
