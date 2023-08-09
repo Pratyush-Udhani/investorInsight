@@ -1,16 +1,17 @@
 import "~/styles/globals.css";
-import SideDrawer from "./components/side_drawer";
+import { Roboto_Mono } from 'next/font/google'
 import type { AppProps } from 'next/app'
 import { api } from "~/utils/api";
- 
+
+const roboto = Roboto_Mono({ subsets: ['latin'] })
+
 function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <div className="flex flex-row">
-            <SideDrawer className="w-60 bg-blue"/>
-            <div className="bg-backdrop grow">
-                <Component {...pageProps} />
-            </div>
-        </div>
+        <main className={roboto.className}>
+            <div className="bg-backdrop w-screen h-screen">
+               <Component {...pageProps} />
+            </div >
+        </main>
     )
 }
 

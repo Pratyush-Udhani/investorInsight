@@ -1,13 +1,13 @@
+import React from 'react';
+import Header from './components/accessibility/header';
 import { api } from '~/utils/api'
-import { CategoryEnum } from '~/utils/categories';
 import { Scatterplot } from './components/scatterplot';
+import { data } from '~/utils/data';
 
 export default function Home() {
-    const data = api.router.getAppsByCategory.useQuery(CategoryEnum.GAME)
-    console.log(data.data)
     return (
-        <div className="w-full h-full flex justify-center">
+        <div className="flex flex-row justify-center w-screen p-12 h-screen">
+            <Header/>
         </div>
     );
 }
-
