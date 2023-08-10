@@ -1,4 +1,5 @@
-import { CategoryDataType } from "./context";
+import { CategoryEnum } from "~/utils/categories";
+import { CategoryDataType, CurrentCategoryDataType } from "./context";
 
 type ActionMap<M extends { [index: string]: any }> = {
     [Key in keyof M]: M[Key] extends undefined
@@ -11,13 +12,21 @@ type ActionMap<M extends { [index: string]: any }> = {
 };
 
 export enum Types {
+    UpdateData = "UPDATE_DATA", 
     SelectCategory = "SELECT_CATEGORY", 
+    SetFetched = "SET_FETCHED"
 }
 
 type AppPayload = {
-    [Types.SelectCategory]: {
+    [Types.UpdateData]: {
         categoryData: CategoryDataType
+    },
+    [Types.SelectCategory]: {
+        category: CategoryEnum,
     }, 
+    [Types.SetFetched]: {
+        isFetched: boolean
+    }
 }
 
 export type AppActions = ActionMap<AppPayload>[keyof ActionMap<AppPayload>];
@@ -27,7 +36,7 @@ export const graphReducer = (
     action: AppActions
 ) => {
     switch (action.type) {
-        case Types.SelectCategory: {
+        case Types.UpdateData: {
             state = {
                 id: action.payload.categoryData.id, 
                 name: action.payload.categoryData.name, 
@@ -39,7 +48,26 @@ export const graphReducer = (
     }
 }
 
-
+export const categoryReducer = (
+    state: CurrentCategoryDataType, 
+    action: AppActions
+) => {
+    switch (action.type) {
+        case Types.SelectCategory: {
+            state = {
+                ...state, 
+                currentCategory: action.payload.category
+            }; 
+            return state;
+        };
+        case Types.SetFetched: {
+            state = {...state, isFetched: action.payload.isFetched}
+            return state; 
+        };
+        default: 
+            return state
+    }
+}
 
 
 

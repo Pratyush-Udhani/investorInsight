@@ -6,9 +6,6 @@ import { api } from '~/utils/api';
 import { CategoryEnum } from '~/utils/categories';
 
 const Home : React.FC = () => {
-    const res = api.router.getAppsByCategory.useQuery(CategoryEnum.ART_AND_DESIGN); 
-    console.log(res.data) 
-
     return (
         <div className="flex flex-row justify-center w-screen p-12 h-screen">
             <DataFetcher>
