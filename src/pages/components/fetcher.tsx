@@ -10,21 +10,23 @@ const DataFetcher = ({ children }: { children: React.ReactNode }) => {
     if (state.categoryData.id === -1) {
         const res = api.router.getAppsByCategory.useQuery(CategoryEnum.BEAUTY);
         if (res.status === 'success') {
-            const category = JSON.parse(JSON.stringify(res.data));
-            dispatch({
-                type: Types.SelectCategory, 
-                payload: {
-                    categoryData: {
-                        id: category.id, 
-                        name: category.name,
-                        genres: category.genres
+            const category = res.data;
+            if (category) {
+                dispatch({
+                    type: Types.SelectCategory, 
+                    payload: {
+                        categoryData: {
+                            id: category.id, 
+                            name: category.name,
+                            genres: category.genres
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
     return <>{children}</>;
 }
 
-export default DataFetcher;
+export default DataFetcher

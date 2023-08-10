@@ -2,7 +2,7 @@ import React, { Dispatch, createContext, useReducer } from 'react';
 import { CategoryMapping, CategoryEnum } from '~/utils/categories';
 import { AppActions, graphReducer } from './reducers';
 
-type App = {
+export type App = {
      id: number,
      name: string,
      rating: number,
@@ -17,10 +17,10 @@ type App = {
      genreId: number,
 }
 
-type Genre = {
+export type Genre = {
     id: number, 
     name: string, 
-    categoryID: number, 
+    categoryId: number, 
     apps: App[]
 }
 
