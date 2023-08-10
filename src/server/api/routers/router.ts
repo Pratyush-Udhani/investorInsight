@@ -17,10 +17,10 @@ export const router = createTRPCRouter({
 
         if(toAPI === null) {
             console.log("doesnt exist in prisma")
-            if(input == 1) {
+            if(input == CategoryEnum.ART_AND_DESIGN) {
                 //first fetch
                 console.log("first fetch")
-                const data = await fetchDataFromSheet('custom');
+                const data = await fetchDataFromSheet(CategoryMapping[input]);
                 if (data && data.length > 0) {
                    await populateDataToPrisma(data);
                     apps = await prisma.category.findUnique({
