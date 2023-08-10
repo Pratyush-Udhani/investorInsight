@@ -28,7 +28,6 @@ export const graphReducer = (
 ) => {
     switch (action.type) {
         case Types.SelectCategory: {
-            console.log("in reducer")
             state = {
                 id: action.payload.categoryData.id, 
                 name: action.payload.categoryData.name, 

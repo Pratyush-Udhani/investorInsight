@@ -4,9 +4,9 @@ import { Scatterplot } from './scatterplot/scatterplot';
 
 const Graph : React.FC = () => {
     const { state, dispatch } = useContext(AppContext)
-    console.log(state.categoryData)
     return(
-        <div></div>
+        <div>
+        </div>
     )
 }
 

@@ -18,26 +18,27 @@ export async function fetchDataFromSheet(categoryName: string) {
             spreadsheetId: env.SHEET_ID, 
             range: range, 
         }); 
-
         const data = response.data.values; 
         if (!data || data.length === 0) {
             console.log("no data found in range");
             return null; 
         }
-        const headers = data.shift()
-        return(data)
+        const header = data.shift()
+        const filteredData = data.filter((el) => {return el[1] === categoryName})
+        return(filteredData)
     } catch (error) {
         console.log("erroi")
         return null;
     }
 }
 export async function populateDataToPrisma(data: any[]) {
+    console.log("adding data to prisma")
     for (const row of data) {
         const categoryName: string  = row[1]
         const genreName: string = row[9]
         const appName: string = row[0]
-        const rating: number = row[2]
-        const reviews_number: number = row[3]
+        const rating: string = row[2]
+        const reviews_number: string = row[3]
         const size: string = row[4]
         const installs: string = row[5]
         const price: string = row[7]
@@ -45,24 +46,21 @@ export async function populateDataToPrisma(data: any[]) {
         const version: string = row[11]
         const last_updated: string = row[10]
         const android_ver: string = row[12]
-
+      
         const existingCategory = await prisma.category.findFirst({
             where: { name: categoryName }
         })
-        const existingGenre = await prisma.genre.findFirst({
-            where: { name: genreName}
-        })
-        const existingApp = await prisma.app.findFirst({
-            where: { name: appName }
-        })
+       
         let category;
-        let genre; 
-        let app; 
-
-        // TODO: category in genre check 
-
         if (existingCategory) {
-            if (!existingGenre) {
+            const genreInCategory = await prisma.genre.findFirst({
+                where: {
+                    name: genreName,
+                    categoryId: existingCategory.id
+                }
+            });
+
+            if (!genreInCategory) {
                 category = await prisma.category.update({
                     where: { id: existingCategory.id}, 
                     data: { name: categoryName, 
@@ -99,7 +97,7 @@ export async function populateDataToPrisma(data: any[]) {
                         genres: {
                             update: [
                                 {
-                                    where: { id: existingGenre.id },
+                                    where: { id: genreInCategory.id },
                                     data: {
                                         name: genreName,
                                         apps: {
