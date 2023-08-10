@@ -59,6 +59,8 @@ export async function populateDataToPrisma(data: any[]) {
         let genre; 
         let app; 
 
+        // TODO: category in genre check 
+
         if (existingCategory) {
             if (!existingGenre) {
                 category = await prisma.category.update({
