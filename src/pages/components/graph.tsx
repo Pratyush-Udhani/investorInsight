@@ -15,19 +15,15 @@ const Graph : React.FC<Props> = ({ className }) => {
     const { state, dispatch } = useContext(AppContext)
     const res = api.router.getAppsByCategory.useQuery(CategoryIdMapping[state.currentCategory] as CategoryEnum)
     
-    console.log("start fetching: ", res.data?.name)
-    console.log("state data: ", state.categoryData.name)
     useEffect(() => {
             switch(res.status) { 
                 case 'loading': {
-                    console.log("loading")
                     dispatch({ 
                         type: Types.ToggleLoading, 
                         payload: { isLoading: true }
                     })
                 }
                 case 'success': {
-                    console.log("success")
                     if (res.data) {
                         dispatch({ 
                             type: Types.ToggleLoading, 
@@ -53,7 +49,7 @@ const Graph : React.FC<Props> = ({ className }) => {
         
     return(
         <div className={`flex flex-col justify-start ${className}`}>
-            <Scatterplot className='' width={500} height={500}/>
+            <Scatterplot className='h-full pb-10' width={900} height={650}/>
         </div>
     )
 }
