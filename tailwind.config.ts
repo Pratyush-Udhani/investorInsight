@@ -16,7 +16,6 @@ export default {
                 red: '#D34747', 
                 text_white: '#DADADA', 
                 text_gray: '#878787'
-
             },
             fontSize: {
                 base: "1rem",

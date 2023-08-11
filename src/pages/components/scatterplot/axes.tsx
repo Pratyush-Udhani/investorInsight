@@ -70,7 +70,7 @@ export const Axes = ({ x, y, width, height }: AxesProps) => {
       </text>
       {/* labels for Y axis */}
       <text
-        x={x - 100}
+        x={x - 120}
         y={15}
         fill="#ababab"
         fontSize={16}
@@ -80,7 +80,7 @@ export const Axes = ({ x, y, width, height }: AxesProps) => {
         Low Ratings
       </text>
       <text
-        x={x - 115}
+        x={x - 135}
         y={15}
         fill="#ababab"
         fontSize={16}
@@ -101,7 +101,7 @@ export const Axes = ({ x, y, width, height }: AxesProps) => {
         High Ratings
       </text>
       <text
-        x={x + 115}
+        x={x + 135}
         y={15}
         fill="#ababab"
         fontSize={16}

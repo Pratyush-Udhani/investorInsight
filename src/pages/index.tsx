@@ -48,9 +48,9 @@ const Home : React.FC = () => {
 
     return (
         <>
-            <div className="flex flex-col w-screen p-12 h-screen">
+            <div className="flex flex-col w-screen px-12 pt-12 h-screen">
                 <Header className='w-full h-fit'/>
-                <Graph className='h-full'/>
+                <Graph className='grow'/>
                 {state.loading && ( 
                     <div className='bg-backdrop inset-0 absolute'>
                         <p className='text-white'>Structuring your data from google sheets. Don't worry this happen once per category</p>

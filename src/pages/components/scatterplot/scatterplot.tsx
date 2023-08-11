@@ -4,41 +4,48 @@ import styles from "./scatterplot.module.css";
 import { Axes } from "./axes";
 import { App, AppContext, Genre } from "~/pages/context/context";
 import { getMathLog } from "~/utils/helpers";
+import Tooltip from "./tooltip";
 
 const MARGIN = { top: 60, right: 60, bottom: 60, left: 60 };
 
 type ScatterplotProps = {
     width: number;
     height: number;
+    className: string
 };
 
 type InteractionData = App & {
     xPos: number;
     yPos: number;
 }
-export const Scatterplot = ({ width, height }: ScatterplotProps) => {
+export const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
     const [interactionData, setInteractionData] = useState<InteractionData>();
     const { state, dispatch } = useContext(AppContext)
     const data = state.categoryData.genres
     let apps: App[] = []
  // Scales
-    const xScale = d3.scaleLinear().domain([0, 5]).range([0, width]);
-    const yScale = d3.scaleLinear().domain([0, 7.88]).range([0,height]);
-    const sizeScale = d3.scaleSqrt().domain([0, 10000000]).range([3, 40]);
-    
-    
+    const xScale = d3.scaleLinear().domain([2.5, 5]).range([0, width]);
+    const yScale = d3.scaleLinear().domain([0, 7.88]).range([height, 0]);
+    const sizeScale = d3.scaleSqrt().domain([0, 10000000]).range([5, 20]);
+
   // Build the shapes
     data.map((genre) => { 
         apps.push(...genre.apps)
 
     })
     const allShapes = apps.map((d, i) => {
+            //console.log(d.price.replaceAll('$', ''))
+            const color = +d.price.replaceAll('$','') === 0
+                ? "#E9AF3F"
+                : "#D34747"
             const isDimmed = interactionData; 
             const className = isDimmed
               ? styles.scatterplotSquare + " " + styles.dimmed
               : styles.scatterplotSquare;
             const xPos = xScale(d.rating) ;
             const yPos = yScale(getMathLog(d.reviews_number));
+            const size = sizeScale(+(d.installs.replaceAll(',', '')))
+            console.log(d.reviews_number, ' ', yPos)
             return (
                 <g
                     key={i}
@@ -53,12 +60,12 @@ export const Scatterplot = ({ width, height }: ScatterplotProps) => {
                   >
                   <circle
                     key={i}
-                    r={1}
+                    r={size}
                     cx={xPos}
                     cy={yPos}
-                    opacity={1}
-                    stroke="#fff"
-                    fill="#fff"
+                    opacity={0.5}
+                    stroke={color}
+                    fill={color}
                     fillOpacity={0.4}
                     strokeWidth={1}
                     className={className}
@@ -68,13 +75,13 @@ export const Scatterplot = ({ width, height }: ScatterplotProps) => {
         })
 
   return (
-    <div className="flex flex-col h-full w-full">
-        <div className="w-full h-full flex justify-center">
-            <div className="align-middle self-center p-20">
-              <svg width={width} height={height}>
+    <div className={`flex flex-row ${className}`}>
+        <div className="basis-4/6 h-full flex flex-col">
+            <div className="align-middle self-center">
+              <svg width={650} height={650} viewBox="0 150 650 200">
                 <g>
                   <Axes
-                    x={xScale(2.5)}
+                    x={width / 2}
                     y={yScale(3.94)}
                     width={width}
                     height={height}
@@ -83,9 +90,33 @@ export const Scatterplot = ({ width, height }: ScatterplotProps) => {
                 </g>
               </svg>
             </div>
+            <div className="flex flex-row w-full justify-start">
+                <div id="inner" className="flex flex-row items-start pr-9 mr-3">
+                    <div className="rounded-full bg-yellow opacity-50 h-full aspect-square"/>
+                    <p className="text-text_white h-fit ml-2 text-sm w-fit">Free</p>
+                </div>
+                <div id="inner" className="flex flex-row items-start pr-9 mr-3">
+                    <div className="rounded-full bg-red opacity-50 h-full aspect-square"/>
+                    <p className="text-text_white h-fit ml-2 text-sm w-fit">Paid</p>
+                </div>
+            </div>
         </div>
-        <div className="bg-black w-full h-20"/>
+        <div className="basis-2/6 py-5"> 
+            <Tooltip className="w-full h-full"/>
+        </div>
     </div>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
 

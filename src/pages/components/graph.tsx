@@ -48,7 +48,8 @@ const Graph : React.FC<Props> = ({ className }) => {
         }, [res.status])
         
     return(
-        <div className={`${className}`}>
+        <div className={`flex flex-col justify-start ${className}`}>
+            <Scatterplot className='' width={500} height={500}/>
         </div>
     )
 }
