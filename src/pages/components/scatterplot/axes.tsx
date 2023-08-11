@@ -5,7 +5,7 @@ type AxesProps = {
   height: number;
 };
 
-export const Axes = ({ x, y, width, height }: AxesProps) => {
+const Axes = ({ x, y, width, height }: AxesProps) => {
   return (
     <g>
       {/* vertical and horizontal lines */}
@@ -113,3 +113,5 @@ export const Axes = ({ x, y, width, height }: AxesProps) => {
     </g>
   );
 };
+
+export default Axes

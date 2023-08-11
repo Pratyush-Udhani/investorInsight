@@ -1,3 +1,4 @@
+import React from "react";
 import { CategoryDataType, InteractionDataType } from "./context";
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -95,3 +96,6 @@ export const interactionReducer = (
             return state
     }
 }
+
+const PH = () => {return(<></>)}
+export default PH

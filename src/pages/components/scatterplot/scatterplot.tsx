@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { useState, useEffect, useContext } from "react";
 import styles from "./scatterplot.module.css";
-import { Axes } from "./axes";
+import  Axes  from "./axes";
 import { App, AppContext, Genre } from "~/pages/context/context";
 import { getMathLog } from "~/utils/helpers";
 import Tooltip from "./tooltip";
@@ -24,7 +24,7 @@ type Origin = {
     size: number
 }
 
-export const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
+const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
     const { state, dispatch } = useContext(AppContext)
     const data = state.categoryData
 
@@ -134,6 +134,7 @@ export const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
   );
 };
 
+export default Scatterplot
 
 
 

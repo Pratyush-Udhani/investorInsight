@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react' 
 
 import { AppContext } from '../context/context';
-import { Scatterplot } from './scatterplot/scatterplot';
+import Scatterplot  from './scatterplot/scatterplot';
 import { api } from '~/utils/api';
 import { CategoryEnum, CategoryIdMapping } from '~/utils/categories';
 import { Types } from '../context/reducers';
@@ -49,7 +49,7 @@ const Graph : React.FC<Props> = ({ className }) => {
         
     return(
         <div className={`flex flex-col justify-start ${className}`}>
-            <Scatterplot className='h-full pb-10' width={900} height={650}/>
+            <Scatterplot className='h-full pb-10' width={800} height={650}/>
         </div>
     )
 }

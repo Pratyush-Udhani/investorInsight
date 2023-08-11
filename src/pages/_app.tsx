@@ -2,7 +2,7 @@ import "~/styles/globals.css";
 import { Roboto_Mono } from 'next/font/google'
 import type { AppProps } from 'next/app'
 import { api } from "~/utils/api";
-import { AppProvider } from "./context/context";
+import AppProvider from "./context/context";
 
 const roboto = Roboto_Mono({ subsets: ['latin'] })
 

@@ -1,6 +1,6 @@
 import React, { Dispatch, createContext, useReducer } from 'react'; 
 import { categories } from '~/utils/categories';
-import { AppActions, categoryReducer, graphReducer, interactionReducer, loadingReducer } from './reducers';
+import { AppActions, graphReducer, categoryReducer, interactionReducer, loadingReducer } from './reducers';
 
 export type App = {
      id: number,
@@ -81,7 +81,8 @@ const AppProvider = ({ children } : { children: React.ReactNode }) => {
     )
 }
 
-export { AppContext, AppProvider }
+export default AppProvider
+export { AppContext }
 
 
 
