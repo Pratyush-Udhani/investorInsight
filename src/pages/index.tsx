@@ -48,7 +48,7 @@ const Home : React.FC = () => {
 
     return (
         <>
-            <div className="flex flex-col w-screen px-12 pt-12 h-screen">
+            <div className="flex flex-col w-screen px-12 pt-12 mb-5 h-screen">
                 <Header className='w-full h-fit'/>
                 <Graph className='grow'/>
                 {state.loading && ( 

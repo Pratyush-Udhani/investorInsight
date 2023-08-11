@@ -5,8 +5,7 @@ import { Axes } from "./axes";
 import { App, AppContext, Genre } from "~/pages/context/context";
 import { getMathLog } from "~/utils/helpers";
 import Tooltip from "./tooltip";
-
-const MARGIN = { top: 60, right: 60, bottom: 60, left: 60 };
+import { Types } from "~/pages/context/reducers";
 
 type ScatterplotProps = {
     width: number;
@@ -18,10 +17,11 @@ type InteractionData = App & {
     xPos: number;
     yPos: number;
 }
+
 export const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
     const [interactionData, setInteractionData] = useState<InteractionData>();
     const { state, dispatch } = useContext(AppContext)
-    const data = state.categoryData.genres
+    const data = state.categoryData
     let apps: App[] = []
  // Scales
     const xScale = d3.scaleLinear().domain([2.5, 5]).range([0, width]);
@@ -29,7 +29,7 @@ export const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
     const sizeScale = d3.scaleSqrt().domain([0, 10000000]).range([5, 20]);
 
   // Build the shapes
-    data.map((genre) => { 
+    data.genres.map((genre) => { 
         apps.push(...genre.apps)
 
     })
@@ -38,25 +38,35 @@ export const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
             const color = +d.price.replaceAll('$','') === 0
                 ? "#E9AF3F"
                 : "#D34747"
-            const isDimmed = interactionData; 
+            const isDimmed = state.interactionData;
             const className = isDimmed
               ? styles.scatterplotSquare + " " + styles.dimmed
               : styles.scatterplotSquare;
             const xPos = xScale(d.rating) ;
             const yPos = yScale(getMathLog(d.reviews_number));
             const size = sizeScale(+(d.installs.replaceAll(',', '')))
-            console.log(d.reviews_number, ' ', yPos)
+            
             return (
                 <g
                     key={i}
                     onMouseMove={() =>
-                      setInteractionData({
-                        xPos,
-                        yPos,
-                        ...d,
-                      })
+                        dispatch({
+                            type: Types.SetInteractionData, 
+                            payload: {
+                                interactionData: {
+                                    xPos: xPos, 
+                                    yPos: yPos,
+                                    app: d
+                                }
+                            }
+                        })
                     }
-                    onMouseLeave={() => setInteractionData(undefined)}
+                    onMouseLeave={() => 
+                        dispatch({
+                            type: Types.SetInteractionData,
+                            payload: { interactionData: undefined }
+                        })
+                    }
                   >
                   <circle
                     key={i}
@@ -66,7 +76,7 @@ export const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
                     opacity={0.5}
                     stroke={color}
                     fill={color}
-                    fillOpacity={0.4}
+                    fillOpacity={0.7}
                     strokeWidth={1}
                     className={className}
                   />
@@ -78,7 +88,7 @@ export const Scatterplot = ({ width, height, className }: ScatterplotProps) => {
     <div className={`flex flex-row ${className}`}>
         <div className="basis-4/6 h-full flex flex-col">
             <div className="align-middle self-center">
-              <svg width={650} height={650} viewBox="0 150 650 200">
+              <svg width={800} height={650} viewBox="-50 150 650 200">
                 <g>
                   <Axes
                     x={width / 2}

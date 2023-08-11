@@ -18,5 +18,7 @@
     stroke-width: 2px;
 }
 
-
+.tooltip {
+    filter: blur(0);
+}
 

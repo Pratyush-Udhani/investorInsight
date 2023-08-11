@@ -9,8 +9,8 @@ const roboto = Roboto_Mono({ subsets: ['latin'] })
 function MyApp({ Component, pageProps }: AppProps) {
     return (
         <AppProvider>
-            <main className={roboto.className}>
-                    <div className="bg-backdrop w-screen h-screen">
+            <main className={`${roboto.className}`}>
+                    <div className="w-screen h-max">
                        <Component {...pageProps} />
                     </div >
             </main>

@@ -1,4 +1,4 @@
-import { CategoryDataType } from "./context";
+import { CategoryDataType, InteractionDataType } from "./context";
 
 type ActionMap<M extends { [index: string]: any }> = {
     [Key in keyof M]: M[Key] extends undefined
@@ -14,6 +14,7 @@ export enum Types {
     UpdateData = "UPDATE_DATA", 
     SetCurrentCategory = "SET_CURRENT_CATEGORY", 
     ToggleLoading = "TOGGLE_LOADING", 
+    SetInteractionData = "SET_INTERACTION_DATA"
 }
 
 type AppPayload = {
@@ -25,7 +26,10 @@ type AppPayload = {
     }, 
     [Types.ToggleLoading]: {
         isLoading: boolean
-    } 
+    },
+    [Types.SetInteractionData]: {
+        interactionData: InteractionDataType
+    }
 }
 
 export type AppActions = ActionMap<AppPayload>[keyof ActionMap<AppPayload>];
@@ -78,3 +82,16 @@ export const loadingReducer = (
     }
 }
 
+export const interactionReducer = (
+    state: InteractionDataType,
+    action: AppActions
+) => {
+    switch(action.type) {
+        case Types.SetInteractionData: {
+            state = action.payload.interactionData
+            return state
+        }
+        default: 
+            return state
+    }
+}

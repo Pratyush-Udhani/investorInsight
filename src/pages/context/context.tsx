@@ -1,6 +1,6 @@
 import React, { Dispatch, createContext, useReducer } from 'react'; 
 import { categories } from '~/utils/categories';
-import { AppActions, categoryReducer, graphReducer, loadingReducer } from './reducers';
+import { AppActions, categoryReducer, graphReducer, interactionReducer, loadingReducer } from './reducers';
 
 export type App = {
      id: number,
@@ -30,10 +30,17 @@ export type CategoryDataType = {
     genres: Genre[]
 }
 
+export type InteractionDataType = {
+    xPos: number, 
+    yPos: number, 
+    app: App
+} | undefined
+
 type initialStateType = {
     categoryData: CategoryDataType, 
     currentCategory: string, 
-    loading: boolean
+    loading: boolean, 
+    interactionData: InteractionDataType
 }
 
 const initialState = {
@@ -43,7 +50,8 @@ const initialState = {
         genres: []
     }, 
     currentCategory: categories[0] as string, 
-    loading: false
+    loading: false, 
+    interactionData: undefined
 }
 
 const AppContext = createContext<{
@@ -55,12 +63,13 @@ const AppContext = createContext<{
 });
 
 const mainReducer = (
-    { categoryData, currentCategory, loading} : initialStateType, 
+    { categoryData, currentCategory, loading, interactionData } : initialStateType, 
     action: AppActions
 ) => ({
     categoryData: graphReducer(categoryData, action), 
     currentCategory: categoryReducer(currentCategory, action), 
-    loading: loadingReducer(loading, action)
+    loading: loadingReducer(loading, action), 
+    interactionData: interactionReducer(interactionData, action)
 });
 
 const AppProvider = ({ children } : { children: React.ReactNode }) => {
