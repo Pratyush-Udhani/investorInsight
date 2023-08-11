@@ -1,5 +1,4 @@
-import { CategoryEnum } from "~/utils/categories";
-import { CategoryDataType, CurrentCategoryDataType } from "./context";
+import { CategoryDataType } from "./context";
 
 type ActionMap<M extends { [index: string]: any }> = {
     [Key in keyof M]: M[Key] extends undefined
@@ -13,20 +12,20 @@ type ActionMap<M extends { [index: string]: any }> = {
 
 export enum Types {
     UpdateData = "UPDATE_DATA", 
-    SelectCategory = "SELECT_CATEGORY", 
-    SetFetched = "SET_FETCHED"
+    SetCurrentCategory = "SET_CURRENT_CATEGORY", 
+    ToggleLoading = "TOGGLE_LOADING", 
 }
 
 type AppPayload = {
     [Types.UpdateData]: {
         categoryData: CategoryDataType
     },
-    [Types.SelectCategory]: {
-        category: CategoryEnum,
+    [Types.SetCurrentCategory]: {
+        currentCategory: string,
     }, 
-    [Types.SetFetched]: {
-        isFetched: boolean
-    }
+    [Types.ToggleLoading]: {
+        isLoading: boolean
+    } 
 }
 
 export type AppActions = ActionMap<AppPayload>[keyof ActionMap<AppPayload>];
@@ -49,36 +48,33 @@ export const graphReducer = (
 }
 
 export const categoryReducer = (
-    state: CurrentCategoryDataType, 
+    state: string, 
     action: AppActions
 ) => {
     switch (action.type) {
-        case Types.SelectCategory: {
-            state = {
-                ...state, 
-                currentCategory: action.payload.category
-            }; 
+
+        case Types.SetCurrentCategory: {
+            state = action.payload.currentCategory
             return state;
-        };
-        case Types.SetFetched: {
-            state = {...state, isFetched: action.payload.isFetched}
-            return state; 
         };
         default: 
             return state
     }
 }
 
+export const loadingReducer = (
+    state: boolean, 
+    action: AppActions
+) => {
+    switch(action.type) {
+        case Types.ToggleLoading: {
+            state = action.payload.isLoading
+            return state
+        }
+        default: 
+            return state; 
 
 
-
-
-
-
-
-
-
-
-
-
+    }
+}
 

@@ -1,6 +1,6 @@
 import React, { Dispatch, createContext, useReducer } from 'react'; 
-import { CategoryMapping, CategoryEnum } from '~/utils/categories';
-import { AppActions, categoryReducer, graphReducer } from './reducers';
+import { categories } from '~/utils/categories';
+import { AppActions, categoryReducer, graphReducer, loadingReducer } from './reducers';
 
 export type App = {
      id: number,
@@ -30,14 +30,10 @@ export type CategoryDataType = {
     genres: Genre[]
 }
 
-export type CurrentCategoryDataType = {
-    currentCategory: CategoryEnum, 
-    isFetched: boolean
-}
-
 type initialStateType = {
     categoryData: CategoryDataType, 
-    currentCategoryData: CurrentCategoryDataType
+    currentCategory: string, 
+    loading: boolean
 }
 
 const initialState = {
@@ -46,10 +42,8 @@ const initialState = {
         name: "",
         genres: []
     }, 
-    currentCategoryData: { 
-        currentCategory: CategoryEnum.ART_AND_DESIGN, 
-        isFetched: false
-    }
+    currentCategory: categories[0] as string, 
+    loading: false
 }
 
 const AppContext = createContext<{
@@ -61,11 +55,12 @@ const AppContext = createContext<{
 });
 
 const mainReducer = (
-    { categoryData, currentCategoryData } : initialStateType, 
+    { categoryData, currentCategory, loading} : initialStateType, 
     action: AppActions
 ) => ({
     categoryData: graphReducer(categoryData, action), 
-    currentCategoryData: categoryReducer(currentCategoryData, action)
+    currentCategory: categoryReducer(currentCategory, action), 
+    loading: loadingReducer(loading, action)
 });
 
 const AppProvider = ({ children } : { children: React.ReactNode }) => {

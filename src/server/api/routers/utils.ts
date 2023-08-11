@@ -31,7 +31,7 @@ export async function fetchDataFromSheet(categoryName: string) {
         return null;
     }
 }
-export async function populateDataToPrisma(data: any[]) {
+export async function populateDataToPrismaAndFetch(data: any[], input: number) {
     console.log("adding data to prisma")
     for (const row of data) {
         const categoryName: string  = row[1]
@@ -126,6 +126,7 @@ export async function populateDataToPrisma(data: any[]) {
         } else {
             category = await prisma.category.create({
                 data: {
+                    id: input, 
                     name: categoryName,
                     genres: {
                         create: [
@@ -154,4 +155,11 @@ export async function populateDataToPrisma(data: any[]) {
             });
         }
     }
+
+    const apps = await prisma.category.findUnique({
+        where: { id: input }, 
+        include: { genres: { include: { apps: true } } }
+    })
+    console.log("fetch and send") 
+     return apps; 
 }
